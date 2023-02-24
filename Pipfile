@@ -5,6 +5,11 @@ name = "pypi"
 
 [packages]
 selenium = "*"
+free-proxy = "*"
+loguru = "*"
+telebot = "*"
+schedule = "*"
+pandas = "*"
 
 [dev-packages]
 
