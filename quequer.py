@@ -9,7 +9,6 @@ from pandas import to_datetime
 # selenium
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.support import expected_conditions as EC
 
 # this lib
 import config
@@ -30,9 +29,9 @@ class Bot:
         
         self.avaliable_visit_time = dict()
         
-        logger.info(
-            f'Got proxy address: {self.driver.capabilities["proxy"]["httpProxy"]}'
-        )
+        # logger.info(
+        #     f'Got proxy address: {self.driver.capabilities["proxy"]["httpProxy"]}'
+        # )
 
 
     def workflow(self):
@@ -43,11 +42,12 @@ class Bot:
             self.go_to_services_page()
             self.choose_service()
 
-            if self.are_there_available_dates():
+            if self.there_are_available_dates():
 
                 self.some_clicks()
                 self.parse_nearest_months('2023-02-23')
                 self.confirm()
+                funKit.message_to_telegram("OK. Check Email.")
 
             else:
                 
@@ -57,7 +57,7 @@ class Bot:
 
     def go_to_services_page(self):
         try:
-            self.driver.get('https://ambasada-r-moldova-in-f-rusa.reservio.com/services')
+            self.driver.get(config.services_url)
             
         except Exception as err:
             funKit.message_to_telegram("Services page error: " + str(err))
@@ -71,10 +71,14 @@ class Bot:
             funKit.message_to_telegram("Service choose error: " + str(err))
 
 
-    def are_there_available_dates(self):
-        if EC.visibility_of((By.XPATH, "//div[contains(@class, 'calendarHeader')]")):
+    def there_are_available_dates(self):
+        try:
+            self.driver.find_element(By.XPATH, "//div[contains(@class, 'calendarHeader')]")
             return True
-        return False
+
+        except NoSuchElementException:
+            funKit.message_to_telegram("No available dates")
+            return False
 
 
     def some_clicks(self):

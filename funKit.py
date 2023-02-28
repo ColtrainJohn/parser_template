@@ -1,4 +1,8 @@
+# standart
 from pathlib import Path
+
+
+# special
 from fp.fp import FreeProxy
 import requests
 
@@ -9,6 +13,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 
 
 # this!
@@ -17,32 +23,55 @@ import config
 
 
 
+# def get_driver(proxy=False):
+
+#     capabilities = webdriver.DesiredCapabilities.FIREFOX
+#     capabilities['marionette'] = True
+#     capabilities["pageLoadStrategy"] = "eager"
+    
+#     if proxy:
+
+#         proxy_address = FreeProxy(country_id=['BR']).get().split('//')[-1]
+
+#         capabilities['proxy'] = {
+#             "proxyType": "MANUAL",
+#             "httpProxy": proxy_address,
+#         }
+
+#     executable_path = str(Path(__file__).absolute().parent) + "/geckodriver"
+
+#     service = Service(executable_path)
+#     options = Options()
+#     options.add_argument('--log-level=3')
+#     options.page_load_strategy = 'eager'
+        
+#     driver = webdriver.Firefox(
+#         service=service,
+#         options=options,
+#         capabilities=capabilities,
+#     )
+
+#     return driver
+
+
 def get_driver(proxy=False):
 
-    capabilities = webdriver.DesiredCapabilities.FIREFOX
-    capabilities['marionette'] = True
-    capabilities["pageLoadStrategy"] = "eager"
-    
-    if proxy:
-
-        proxy_address = FreeProxy(country_id=['BR']).get().split('//')[-1]
-
-        capabilities['proxy'] = {
-            "proxyType": "MANUAL",
-            "httpProxy": proxy_address,
-        }
-
-    executable_path = str(Path(__file__).absolute().parent) + "/geckodriver"
+    executable_path = str(Path(__file__).absolute().parent) + "/chromedriver"
 
     service = Service(executable_path)
-    options = Options()
-    options.add_argument('--log-level=3')
+
+
+    options = webdriver.ChromeOptions()
+    options.add_argument('--proxy-server=%s' % FreeProxy(country_id=['BR']).get().split('//')[-1])
     options.page_load_strategy = 'eager'
+
+    options.add_argument('--no-sandbox')
+    options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
         
-    driver = webdriver.Firefox(
+    driver = webdriver.Chrome(
         service=service,
         options=options,
-        capabilities=capabilities,
     )
 
     return driver
@@ -59,6 +88,7 @@ def login(driver):
     except:
         return False
 
+
 def check_driver_proxy(driver):
     
     driver.get('http://www.whatismyproxy.com/')
@@ -66,7 +96,6 @@ def check_driver_proxy(driver):
     
     return proxy_check.text
         
-
 
 def message_to_telegram(text, chat_id="880726373"):
     response = requests.get(

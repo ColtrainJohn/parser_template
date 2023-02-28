@@ -7,7 +7,7 @@ passwd = 'ьщерукагслук1488'
 quequer = '6028297003:AAHj6ERWi0andx5zuZlsDJGQ0FKJ-gvc04Y'
 
 login_url = 'https://accounts.reservio.com/login'
-
+services_url = 'https://ambasada-r-moldova-in-f-rusa.reservio.com/services'
 
 months = {
     1 : "Январь",
