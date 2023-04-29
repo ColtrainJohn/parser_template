@@ -44,9 +44,10 @@ class Bot:
 
 
     def go_to_services_page(self):
-
+        sleep(5)
         try:
-            self.driver.find_element(By.XPATH, "//a[contains(@data-test, 'visited-businesses')]").click()
+            # self.driver.find_element(By.XPATH, "//a[contains(@data-test, 'visited-businesses')]").click()
+            self.driver.get(config.services_url)
             
         except Exception as err:
             funKit.message_to_telegram("Services page error: " + str(err))

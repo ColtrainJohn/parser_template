@@ -5,7 +5,7 @@ from pathlib import Path
 # special
 from fp.fp import FreeProxy
 import requests
-
+from fake_headers import Headers
 
 # selenium
 from selenium import webdriver
@@ -20,6 +20,14 @@ from selenium.webdriver.chrome.service import Service
 # this!
 import config
 
+
+def get_headers():
+    header = Headers(
+        browser="chrome",  # Generate only Chrome UA
+        os="linux",  # Generate only Windows platform
+        headers=False # generate misc headers
+    )
+    return header.generate()['User-Agent']
 
 
 
@@ -70,7 +78,10 @@ def get_driver(proxy, remote):
     if remote:
         options.add_argument('--no-sandbox')
         options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
+        # options.add_argument('--disable-gpu')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-extensions')
+        options.add_argument(f"user-agent={get_headers()}")
         
     driver = webdriver.Chrome(
         service=service,
