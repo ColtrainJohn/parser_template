@@ -24,7 +24,7 @@ class Bot:
 
         self.service = service
         
-        self.driver = funKit.get_driver(proxy=True)
+        self.driver = funKit.get_driver(proxy=False)
         self.driver.implicitly_wait(10)
         
         self.avaliable_visit_time = dict()
@@ -56,9 +56,10 @@ class Bot:
 
 
     def go_to_services_page(self):
+
         try:
             self.driver.get(config.services_url)
-            
+
         except Exception as err:
             funKit.message_to_telegram("Services page error: " + str(err))
 
