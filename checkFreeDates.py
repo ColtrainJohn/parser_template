@@ -4,7 +4,7 @@ from time import sleep
 
 
 # special libs
-from loguru import logger
+#from loguru import logger
 
 
 # selenium
@@ -55,8 +55,8 @@ class Bot:
 
     def choose_service(self):
         try:
-            self.driver.find_element(By.PARTIAL_LINK_TEXT, self.service).click()
-            # self.driver.find_element(By.XPATH, "//li[contains(@class, 'serviceBookRow')][2]//div[contains(@class, 'rightContent')]").click()
+            # self.driver.find_element(By.PARTIAL_LINK_TEXT, self.service).click()
+             self.driver.find_element(By.XPATH, "//li[contains(@class, 'serviceBookRow')][1]//div[contains(@class, 'rightContent')]").click()
 
         except Exception as err:
             funKit.message_to_telegram("Service choose error:\n" + str(err))
@@ -75,8 +75,9 @@ class Bot:
 
         try:
             self.driver.find_element(By.XPATH, "//div[contains(@class, 'calendarHeader')]")
-            for _ in range(5):
+            for _ in range(30):
                 funKit.message_to_telegram("Чекни сайт", chat_id='-952092728')
+                sleep(1)
             return True
 
         except NoSuchElementException:
@@ -101,7 +102,8 @@ def main():
         
 
     except Exception as err:
-        logger.info(err)
+        #logger.info(err)
+        pass
 
     finally:
         sleep(5)

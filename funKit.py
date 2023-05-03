@@ -65,7 +65,7 @@ def get_headers():
 def get_driver(proxy, remote):
 
     executable_path = str(Path(__file__).absolute().parent) + "/chromedriver"
-
+    print(executable_path)
     service = Service(executable_path)
 
 
@@ -76,6 +76,7 @@ def get_driver(proxy, remote):
         options.add_argument('--proxy-server=%s' % FreeProxy(country_id=['BR']).get().split('//')[-1])
 
     if remote:
+        options.binary_location = "/home/tools/anaconda3/bin/chrome"
         options.add_argument('--no-sandbox')
         options.add_argument('--headless')
         # options.add_argument('--disable-gpu')
